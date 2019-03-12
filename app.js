@@ -1,8 +1,11 @@
 var db = firebase.firestore();
 
-var docRef = db.collection("characters").doc("lee");
+// set collection
+var characters = db.collection("characters");
 
-db.collection("characters")
+var docRef = characters.doc("lee");
+
+characters
   .where("active", "==", true)
   .get()
   .then(function(querySnapshot) {
@@ -28,6 +31,40 @@ docRef
   .catch(function(error) {
     console.log("Error getting document:", error);
   });
+
+function createCharacter(name) {
+  characters.doc(name).set({
+    name: name
+  });
+}
+
+function setAbility(name, ability, value) {
+  characters.doc(name).set({
+    abilities: {
+      ability: value
+    }
+  });
+}
+
+function setSkill(name, skill, rank, mod) {
+  characters.doc(name).set({
+    skills: {
+      name: skill,
+      rank: rank,
+      mod: mod
+    }
+  });
+}
+
+function setPower(name, power, description, cooldown) {
+  characters.doc(name).set({
+    powers: {
+      cooldown: cooldown,
+      name: power,
+      description: description
+    }
+  });
+}
 
 const app = document.querySelector("#app");
 
