@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Character Reference</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header><h1>Character Name</h1></header>
+      <div class="reference">
+        <h2>Reference</h2>
+
+        <h3>Ability Scores</h3>
+        <button id="editAbilityScores">Edit Abilities</button>
+        <form id="editAbilities">
+          <select name="" id="editAbility">
+            <option value="STR">STR</option>
+            <option value="DEX">DEX</option>
+            <option value="CON">CON</option>
+            <option value="INT">INT</option>
+            <option value="WIS">WIS</option>
+            <option value="CHA">CHA</option>
+          </select>
+          <input type="text" id="newAbiltiy" placeholder="New Score" />
+          <input type="submit" id="submitAbilityChange" value="Set" />
+        </form>
+        <table id="abilityScores">
+          <thead>
+            <tr>
+              <td>Ability</td>
+              <td>Score</td>
+              <td>Mod</td>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <h3>Skills</h3>
+        <table id="skills">
+          <thead>
+            <tr>
+              <td>Skill Name</td>
+              <td>Points</td>
+              <td>Mod</td>
+              <td>Total</td>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="powers">
+        <h2>Abilities</h2>
+        <button id="newRound">New Round</button>
+        <button id="clear">Clear All</button>
+        <div id="powersList"></div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+    <script src="auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-firestore.js"></script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
