@@ -72,57 +72,88 @@ var characterName = "Lee";
 document.querySelector("h1").innerHTML = characterName;
 
 const abilityContainer = document.querySelector("#abilityScores tbody");
-var abilityScores = [
-  {
-    ability: "STR",
-    score: 5
-  },
-  {
-    ability: "DEX",
-    score: 10
-  },
-  {
-    ability: "CON",
-    score: 10
-  },
-  {
-    ability: "INT",
-    score: 10
-  },
-  {
-    ability: "WIS",
-    score: 10
-  },
-  {
-    ability: "CHA",
-    score: 10
+
+function updateAbilityMod(target, score) {
+  var mod = target.querySelector(".mod");
+  var modScore = Math.floor((score - 10) / 2);
+  if (modScore >= 0) {
+    modScore = "+ " + modScore;
+  } else {
+    modScore = "- " + Math.abs(modScore);
   }
-];
-
-function fillAbilities() {
-  abilityContainer.innerHTML = "";
-  for (var i = 0; i < abilityScores.length; i++) {
-    var currentAbility = abilityScores[i];
-
-    var row = document.createElement("tr");
-
-    ability = currentAbility.ability;
-    score = parseInt(currentAbility.score);
-
-    modifier = Math.floor((score - 10) / 2);
-
-    if (modifier > 0) {
-      modifier = "+" + modifier;
-    }
-
-    row.innerHTML = `<td>${ability}</td>
-    <td>${score}</td>
-    <td>${modifier}</td>`;
-
-    abilityContainer.append(row);
-  }
+  mod.innerHTML = modScore;
 }
-fillAbilities();
+
+const abilityInputs = document.querySelectorAll("#abilityScores input");
+
+for (var n = 0; n < abilityInputs.length; n++) {
+  var currentAbility = abilityInputs[n];
+  updateAbilityMod(currentAbility.parentNode.parentNode, currentAbility.value);
+  currentAbility.addEventListener("focusout", function(e) {
+    var target = e.target.parentNode.parentNode;
+    var score = e.target.value;
+    updateAbilityMod(target, score);
+  });
+}
+
+// abilityInputs.forEach(abilityInput => {
+//   abilityInput.addEventListener(
+//     "keyup",
+//     updateAbilityMod(abilityInput.parentNode.parentNode, abilityInput.value)
+//   );
+// });
+
+// var abilityScores = [
+//   {
+//     ability: "STR",
+//     score: 5
+//   },
+//   {
+//     ability: "DEX",
+//     score: 10
+//   },
+//   {
+//     ability: "CON",
+//     score: 10
+//   },
+//   {
+//     ability: "INT",
+//     score: 10
+//   },
+//   {
+//     ability: "WIS",
+//     score: 10
+//   },
+//   {
+//     ability: "CHA",
+//     score: 10
+//   }
+// ];
+//
+// function fillAbilities() {
+//   abilityContainer.innerHTML = "";
+//   for (var i = 0; i < abilityScores.length; i++) {
+//     var currentAbility = abilityScores[i];
+//
+//     var row = document.createElement("tr");
+//
+//     ability = currentAbility.ability;
+//     score = parseInt(currentAbility.score);
+//
+//     modifier = Math.floor((score - 10) / 2);
+//
+//     if (modifier > 0) {
+//       modifier = "+" + modifier;
+//     }
+//
+//     row.innerHTML = `<td>${ability}</td>
+//     <td>${score}</td>
+//     <td>${modifier}</td>`;
+//
+//     abilityContainer.append(row);
+//   }
+// }
+// fillAbilities();
 
 // TODO: add ability edit feature
 const abilityFormBtn = document.querySelector("#editAbilityScores");
