@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <title>Character Reference</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css"/>
   </head>
   <body>
+    <div class="is-loading">
+      <div class="loader"></div>
+    </div>
     <div id="app">
-      <header><h1>Character Name</h1></header>
+      <header id="name">
+        <h1>Character Name</h1>
+      </header>
       <div class="reference">
         <h2>Reference</h2>
 
         <h3>Ability Scores</h3>
-        <button id="editAbilityScores">Edit Abilities</button>
-        <form id="editAbilities">
-          <select name="" id="editAbility">
-            <option value="STR">STR</option>
-            <option value="DEX">DEX</option>
-            <option value="CON">CON</option>
-            <option value="INT">INT</option>
-            <option value="WIS">WIS</option>
-            <option value="CHA">CHA</option>
-          </select>
-          <input type="text" id="newAbiltiy" placeholder="New Score" />
-          <input type="submit" id="submitAbilityChange" value="Set" />
-        </form>
         <table id="abilityScores">
           <thead>
             <tr>
@@ -36,36 +28,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr id="str">
-              <td>STR:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
-            <tr id="dex">
-              <td>DEX:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
-            <tr id="con">
-              <td>CON:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
-            <tr id="int">
-              <td>INT:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
-            <tr id="wis">
-              <td>WIS:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
-            <tr id="cha">
-              <td>CHA:</td>
-              <td><input type="tel" maxlength="2" size="2" value="10" /></td>
-              <td class="mod"></td>
-            </tr>
+            <!-- <tr id="str"> <td>STR:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="dex"> <td>DEX:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr
+            id="con"> <td>CON:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="int"> <td>INT:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="wis">
+            <td>WIS:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="cha"> <td>CHA:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> -->
           </tbody>
         </table>
 
@@ -83,7 +48,7 @@
         </table>
       </div>
       <div id="powers">
-        <h2>Abilities</h2>
+        <h2>Powers</h2>
         <button id="newRound">New Round</button>
         <button id="clear">Clear All</button>
         <div id="powersList"></div>
@@ -96,6 +61,8 @@
 
     <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-firestore.js"></script>
     <script src="auth.js"></script>
+    <script src="functions.js"></script>
     <script src="app.js"></script>
+    <script src="events.js"></script>
   </body>
 </html>

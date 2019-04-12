@@ -12,3 +12,37 @@ button {
 #editAbilities {
   display: none;
 }
+
+.is-loading {
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.75);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loader {
+  animation: loader 1s infinite;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 50px;
+  width: 50px;
+  border-style: none solid dotted none;
+  border-radius: 50%;
+  border-color: #7474ab;
+  border-width: 0 4px 4px 0;
+}
