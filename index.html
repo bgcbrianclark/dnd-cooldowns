@@ -27,11 +27,7 @@
               <td>Mod</td>
             </tr>
           </thead>
-          <tbody>
-            <!-- <tr id="str"> <td>STR:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="dex"> <td>DEX:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr
-            id="con"> <td>CON:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="int"> <td>INT:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="wis">
-            <td>WIS:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> <tr id="cha"> <td>CHA:</td> <td><input type="tel" maxlength="2" size="2" value="10"/></td> <td class="mod"></td> </tr> -->
-          </tbody>
+          <tbody></tbody>
         </table>
 
         <h3>Skills</h3>
@@ -46,12 +42,28 @@
           </thead>
           <tbody></tbody>
         </table>
+        <button id="addNewSkill">+ New Skill</button>
+        <form action="" id="addNewSkillForm">
+          <h4>Add a New Skill</h4>
+          <input id="skillName" type="text" placeholder="Skill Name">
+          <input id="skillRank" type="number" placeholder="Rank">
+          <input id="skillMod" type="number" placeholder="Mod">
+          <input type="submit" value="Add">
+        </form>
       </div>
       <div id="powers">
         <h2>Powers</h2>
         <button id="newRound">New Round</button>
         <button id="clear">Clear All</button>
         <div id="powersList"></div>
+        <button id="addNewPower">+ New Power</button>
+        <form action="" id="addNewPowerForm">
+          <h4>Add a New Power</h4>
+          <input id="powerName" type="text" placeholder="Name">
+          <input id="powerCooldown" type="number" placeholder="Cooldown">
+          <textarea id="powerDescription" name="" rows="5" placeholder=""></textarea>
+          <input type="submit" value="Add">
+        </form>
       </div>
     </div>
 

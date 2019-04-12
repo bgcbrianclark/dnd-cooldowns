@@ -1,3 +1,40 @@
+/*****************
+CHARACTER CONTROLLERS
+*****************/
+function createCharacter(name) {
+  charactersList
+    .doc(name)
+    .set({
+      active: true
+    })
+    .then(function() {
+      location.reload();
+    });
+}
+
+function deleteCharacter(char) {
+  charactersList
+    .doc(char)
+    .delete()
+    .then(function() {
+      console.log("Character " + char + " has been deleted");
+    })
+    .catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+}
+
+function buildCharacterName(char) {
+  document.querySelector("#name h1").innerHTML = char.name;
+}
+
+function buildCharacterPage(char) {
+  buildAbilityList(char);
+}
+
+/*****************
+ABILITIES
+*****************/
 // build ability list
 function buildAbilityList(char) {
   const abilityNames = Object.keys(char.abilities);
@@ -12,30 +49,31 @@ function buildAbilityList(char) {
     var tr = document.createElement("tr");
     tr.classList.add(name);
 
-    var tdName = document.createElement("td");
-    tdName.innerHTML = name;
+    tr.innerHTML = `
+      <form action="">
+        <td>${name}</td>
+        <td><input type="number" value="${value}" /></td>
+        <td class="mod"></td>
+      </form>
+    `;
 
-    var tdInput = document.createElement("td");
-    var input = document.createElement("input");
-    input.setAttribute("value", value);
-    input.setAttribute("type", "tel");
-    input.setAttribute("maxlength", "2");
-    tdInput.appendChild(input);
-
-    var tdMod = document.createElement("td");
-    tdMod.classList.add("mod");
-
-    tr.appendChild(tdName);
-    tr.appendChild(tdInput);
-    tr.appendChild(tdMod);
     abilityList.querySelector("tbody").appendChild(tr);
 
     updateAbilityMod(tr, value);
   }
 }
-function updateAbility(trParent) {
+function updateAbility(char, trParent) {
   var name = trParent.classList[0];
-  var value = trParent.querySelector("input").value;
+  var value = parseInt(trParent.querySelector("input").value);
+
+  charactersList.doc(char).set(
+    {
+      abilities: {
+        [name]: value
+      }
+    },
+    { merge: true }
+  );
 
   updateAbilityMod(trParent, value);
 }
@@ -52,12 +90,6 @@ function updateAbilityMod(target, score) {
   mod.innerHTML = modScore;
 }
 
-function createCharacter(name) {
-  characters.doc(name).set({
-    name: name
-  });
-}
-
 function setAbility(name, ability, value) {
   characters.doc(name).set(
     {
@@ -69,30 +101,27 @@ function setAbility(name, ability, value) {
   );
 }
 
-function setSkill(name, skill, rank, mod) {
-  characters.doc(name).set(
-    {
-      skills: {
-        name: skill,
-        rank: rank,
-        mod: mod
-      }
-    },
-    { merge: true }
-  );
-}
-
-function setPower(name, power, description, cooldown) {
-  characters.doc(name).set(
-    {
-      powers: {
-        cooldown: cooldown,
-        name: power,
-        description: description
-      }
-    },
-    { merge: true }
-  );
+/*****************
+SKILLS
+*****************/
+function createSkill(name, skill, rank, mod) {
+  charactersList
+    .doc(name)
+    .set(
+      {
+        skills: {
+          [skill]: {
+            rank: rank,
+            mod: mod
+          }
+        }
+      },
+      { merge: true }
+    )
+    .then(function() {
+      location.reload();
+      document.querySelector("#addNewSkillForm").style.display = "none";
+    });
 }
 
 // First we grab the container
@@ -100,37 +129,59 @@ var skillsContainer = document.querySelector("#skills");
 
 // Create a function to build out the skills based on the numbers for the selected character
 function buildSkillList(char) {
+  console.log(char.skills);
   if (Object.entries(char.skills).length) {
     var skills = Object.entries(char.skills);
   }
 
   // Loop through each skill and build a tr with tds
   for (var i = 0; i < skills.length; i++) {
-    var name = skills[i][0];
-    var rank = skills[i][1].rank;
-    var mod = skills[i][1].mod;
-    var total = rank + mod;
+    var name = skills[i][0],
+      rank = skills[i][1].rank,
+      mod = skills[i][1].mod,
+      total = rank + mod;
 
     // build out skill table's innerHTML
     var body = skillsContainer.querySelector("tbody");
     var tr = document.createElement("tr");
-    var tdName = document.createElement("td");
-    var tdRank = document.createElement("td");
-    var tdMod = document.createElement("td");
-    var tdTotal = document.createElement("td");
-    tdName.innerHTML = name;
-    tdRank.innerHTML = rank;
-    tdMod.innerHTML = mod;
-    tdTotal.innerHTML = rank + mod;
-    tr.appendChild(tdName);
-    tr.appendChild(tdRank);
-    tr.appendChild(tdMod);
-    tr.appendChild(tdTotal);
+
+    tr.innerHTML = `
+      <form action="">
+        <td><input type="text" value="${name}" /></td>
+        <td><input type="number" value="${rank}" /></td>
+        <td><input type="number" value="${mod}" /></td>
+        <td>${total}</td>
+        <td><button type="button">Edit</button></td>
+      </form>
+    `;
     body.appendChild(tr);
   }
 }
 
-// POWERS
+/*****************
+POWERS
+*****************/
+
+function createPower(name, power, description, cooldown) {
+  charactersList
+    .doc(name)
+    .set(
+      {
+        powers: {
+          [power]: {
+            cooldown: cooldown,
+            description: description,
+            currentRound: 0
+          }
+        }
+      },
+      { merge: true }
+    )
+    .then(function() {
+      location.reload();
+      document.querySelector("#addNewSkillForm").style.display = "none";
+    });
+}
 
 // grab the container
 var powersContainer = document.querySelector("#powersList");
@@ -161,18 +212,35 @@ function buildPowersList(char) {
     div.classList.add("power");
     div.setAttribute("data-id", i);
     div.innerHTML = `
-    <header>
-      <h3 data-id="${name}">${name} <button data-id="${i}">Use Skill</button></h3>
-      <p>${description}</p>
-      <p>Total Cooldown: <span>${totalCooldown}</span> Rounds</p>
-    </header>
-    <div class="skill-status">
-      <p class="cooldown">Rounds to Ready: <span>${currentCooldown}</span></p>
-      <p class="status">Status: <span>${status}</span></p>
-    </div>`;
+    <form data-id="${i}">
+      <header>
+        <h3 data-id="${name}"><input type="text" value="${name}" /> <button type="button">Edit</button></h3>
+        <p><textarea>${description}</textarea></p>
+        <p>Total Cooldown: <span><input type="number" value="${totalCooldown}"</span> Rounds</p>
+      </header>
+      <div class="skill-status">
+        <p class="cooldown">Rounds to Ready: <span>${currentCooldown}</span></p>
+        <p class="status">Status: <span>${status}</span> <button type="button" data-id="${i}">Use Skill</button></p>
+      </div>
+      <input type="submit" value="Finish Editing"/>
+    </form>`;
 
     powersContainer.append(div);
   }
+}
+
+function editPower(char, form, name, description, cooldown) {
+  charactersList.doc(char).set(
+    {
+      powers: {
+        [name]: {
+          description: description,
+          cooldown: cooldown
+        }
+      }
+    },
+    { merge: true }
+  );
 }
 
 // using a power
@@ -207,16 +275,17 @@ function usePower(char, power) {
         );
       });
   } else {
-    console.warn("skill is not ready yet!");
+    alert("Error: " + name + " isn't ready to use yet.");
   }
 }
 
+// Clear all cooldowns (for after fights)
 function clearCooldowns(char) {
   var list = document.querySelectorAll(".power");
   list.forEach(power => {
-    var name = power.querySelector("h3").getAttribute("data-id");
-    var status = power.querySelector(".skill-status .status span");
-    var cooldown = power.querySelector(".skill-status .cooldown span");
+    var name = power.querySelector("h3").getAttribute("data-id"),
+      status = power.querySelector(".skill-status .status span"),
+      cooldown = power.querySelector(".skill-status .cooldown span");
 
     status.innerHTML = "Ready";
     cooldown.innerHTML = 0;
@@ -236,49 +305,52 @@ function clearCooldowns(char) {
   });
 }
 
+// Using the new round button, to sequence cooldowns
 function newRound(char) {
-  var list = document.querySelectorAll(".power");
-  list.forEach(power => {
-    var name = power.querySelector("h3").getAttribute("data-id");
-    var status = power.querySelector(".skill-status .status span");
-    var cooldown = power.querySelector(".skill-status .cooldown span")
-      .innerHTML;
+  charactersList
+    .doc(char)
+    .get()
+    .then(function(doc) {
+      var list = document.querySelectorAll(".power");
+      list.forEach(power => {
+        var name = power.querySelector("h3").getAttribute("data-id");
+        var status = power.querySelector(".skill-status .status span");
+        var cooldown = parseInt(
+          power.querySelector(".skill-status .cooldown span").innerHTML
+        );
+        var cooldownSpan = power.querySelector(".skill-status .cooldown span");
 
-    // check if the cooldown is a word or number
-    if (Number.isInteger(cooldown)) {
-      // we have an integer
-      charactersList
-        .doc(char)
-        .get()
-        .then(function(doc) {
+        // check if the cooldown is a word or number
+        if (Number.isInteger(cooldown)) {
+          // we have an integer
           if (cooldown > 0) {
+            // -1 from cooldown and send to DB
+            cooldown -= 1;
+            cooldownSpan.innerHTML = cooldown;
             charactersList.doc(char).set(
               {
                 powers: {
                   [name]: {
-                    currentRound: doc.data().powers[name].currentRound - 1
+                    currentRound: cooldown
                   }
                 }
               },
               { merge: true }
             );
-            cooldown = doc.data().powers[name].currentRound;
-            console.log("was an integer, is now: " + parseInt(cooldown));
-            buildPowersList(doc.data().id);
+
+            // if we're now at 0 we need to set the status
+            if (cooldown == 0) {
+              status.innerHTML = "Ready";
+            }
           }
-        });
-    } else {
-      // we don't have an integer
-      charactersList
-        .doc(char)
-        .get()
-        .then(function(doc) {
+        } else {
+          // we don't have an integer, set the cooldown back to an integer and set the status
           cooldown = doc.data().powers[name].cooldown;
-          console.log("wasn't an integer, is now: " + parseInt(cooldown));
-        });
-      buildPowersList(toString(char));
-    }
-  });
+          cooldownSpan.innerHTML = cooldown;
+          status.innerHTML = "Waiting";
+        }
+      });
+    });
 }
 
 function buildCharacterList() {
@@ -297,12 +369,4 @@ function buildCharacterList() {
 
     characterSelect.appendChild(addCharacter);
   }
-}
-
-function buildCharacterName(char) {
-  document.querySelector("#name h1").innerHTML = char.name;
-}
-
-function buildCharacterPage(char) {
-  buildAbilityList(char);
 }

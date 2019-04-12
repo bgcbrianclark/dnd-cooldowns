@@ -41,8 +41,13 @@ button {
   margin: auto;
   height: 50px;
   width: 50px;
-  border-style: none solid dotted none;
+  border-style: solid dotted dotted solid;
   border-radius: 50%;
   border-color: #7474ab;
-  border-width: 0 4px 4px 0;
+  border-width: 5px;
+}
+
+#addNewSkillForm,
+#addNewPowerForm {
+  display: none;
 }
